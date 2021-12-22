@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ibilling/core/constants/my_colors.dart';
+import 'package:ibilling/presentation/screens/contracts_screen/widgets/contract_item.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -19,11 +20,59 @@ class Calendar extends StatefulWidget {
 class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildHorizontalCalendar(),
-        _buildContractsInvoiceTabs(),
-      ],
+    return Expanded(
+      child: Column(
+        children: [
+          Flexible(
+            flex: 2,
+            child: _buildHorizontalCalendar(),
+          ),
+          Flexible(
+            flex: 6,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildContractsInvoiceTabs(),
+                  ContractItem(
+                    paddingVertical: 12,
+                    paddingHorizontal: 16,
+                    id: 155,
+                    name: "Kimdir Kimdirovich",
+                    amount: 1250000,
+                    lastInvoice: 156,
+                    numOfInvoices: 5,
+                    date: DateTime.now(),
+                  ),
+                  ContractItem(
+                    paddingVertical: 12,
+                    paddingHorizontal: 16,
+                    id: 156,
+                    name: "Kimdir Kimdirovich",
+                    amount: 1250000,
+                    lastInvoice: 156,
+                    numOfInvoices: 5,
+                    date: DateTime.now().add(
+                      const Duration(days: 5),
+                    ),
+                  ),
+                  ContractItem(
+                    paddingVertical: 12,
+                    paddingHorizontal: 16,
+                    id: 157,
+                    name: "Kimdir Kimdirovich",
+                    amount: 1250000,
+                    lastInvoice: 156,
+                    numOfInvoices: 5,
+                    date: DateTime.now().add(
+                      const Duration(days: 5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

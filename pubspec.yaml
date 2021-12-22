@@ -65,6 +65,7 @@ flutter:
     - lib/assets/icons/contracts_filled.png
     - lib/assets/icons/clock_outlined.png
     - lib/assets/icons/clock_filled.png
+    - lib/assets/icons/app_bar_logo.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

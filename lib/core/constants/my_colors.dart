@@ -9,6 +9,7 @@ class MyColors {
   static const Color notActiveIconColor = Color.fromRGBO(166, 166, 166, 1);
   static const Color activeIconColor = Color.fromRGBO(242, 242, 242, 1);
   static const Color bottomNavBarColor = Color.fromRGBO(20, 20, 22, 1);
+  static const Color lightGrey = Color.fromRGBO(153, 153, 153, 1);
   static const Color transparent = Colors.transparent;
   static const Color white = Colors.white;
   //static const Color calDefDaysColor = Color.fromRGBO(209, 209, 209, 1);

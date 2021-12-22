@@ -7,9 +7,12 @@ class ContractsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Image.asset("lib/assets/icons/app_bar_logo.png"),
+        title: const Text("Contracts"),
+      ),
       body: Column(
         children: [
-          SizedBox(height: 100),
           Calendar(),
         ],
       ),
