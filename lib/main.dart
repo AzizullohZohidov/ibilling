@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ibilling/presentation/screens/contracts_screen/contracts_screen.dart';
+import 'package:ibilling/presentation/screens/landing_screen/landing_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
           bodyText2: TextStyle(color: Colors.white),
         ),
       ),
-      home: ContractsScreen(),
+      //home: ContractsScreen(),
+      home: LandingScreen(),
     );
   }
 }

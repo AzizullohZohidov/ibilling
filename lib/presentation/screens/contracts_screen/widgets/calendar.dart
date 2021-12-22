@@ -6,7 +6,9 @@ import 'package:table_calendar/table_calendar.dart';
 class Calendar extends StatefulWidget {
   var _selectedDay;
   var _focusedDay;
-  PageController? calendarController;
+  //No need for disposal. Disposed internally by TableCalendar
+  PageController? _calendarController;
+  bool contractsTabActive = true;
 
   Calendar({Key? key}) : super(key: key);
 
@@ -19,68 +21,73 @@ class _CalendarState extends State<Calendar> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          color: MyColors.darkGrey,
-          child: TableCalendar(
-            firstDay: DateTime.utc(2000, 1, 1),
-            lastDay: DateTime.utc(2030, 1, 1),
-            focusedDay: widget._focusedDay ?? DateTime.now(),
-            calendarFormat: CalendarFormat.week,
-            daysOfWeekVisible: false,
-            rowHeight: 90,
-            headerStyle: const HeaderStyle(
-              formatButtonVisible: false,
-              headerPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              leftChevronVisible: false,
-              rightChevronVisible: false,
-            ),
-            onCalendarCreated: (PageController calendarPageController) {
-              widget.calendarController = calendarPageController;
-            },
-            selectedDayPredicate: (day) {
-              return isSameDay(widget._selectedDay, day);
-            },
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                widget._selectedDay = selectedDay;
-                widget._focusedDay = focusedDay;
-              });
-            },
-            onPageChanged: (focusedDay) {
-              widget._focusedDay = focusedDay;
-            },
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            calendarStyle: const CalendarStyle(
-              isTodayHighlighted: false,
-            ),
-            calendarBuilders: CalendarBuilders(
-              defaultBuilder: (
-                BuildContext context,
-                DateTime day,
-                DateTime focusedDay,
-              ) =>
-                  defaultCalendarBuilder(context, day, focusedDay),
-              outsideBuilder: (
-                BuildContext context,
-                DateTime day,
-                DateTime focusedDay,
-              ) =>
-                  defaultCalendarBuilder(context, day, focusedDay),
-              selectedBuilder: (
-                BuildContext context,
-                DateTime day,
-                DateTime events,
-              ) =>
-                  selectedCalendarBuilder(context, day, events),
-              headerTitleBuilder: (BuildContext context, DateTime day) =>
-                  titleCalendarBuilder(
-                context,
-                day,
-              ),
-            ),
+        _buildHorizontalCalendar(),
+        _buildContractsInvoiceTabs(),
+      ],
+    );
+  }
+
+  Widget _buildHorizontalCalendar() {
+    return Container(
+      color: MyColors.darkGrey,
+      child: TableCalendar(
+        firstDay: DateTime.utc(2000, 1, 1),
+        lastDay: DateTime.utc(2030, 1, 1),
+        focusedDay: widget._focusedDay ?? DateTime.now(),
+        calendarFormat: CalendarFormat.week,
+        daysOfWeekVisible: false,
+        startingDayOfWeek: StartingDayOfWeek.monday,
+        rowHeight: 90,
+        headerStyle: const HeaderStyle(
+          formatButtonVisible: false,
+          headerPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          leftChevronVisible: false,
+          rightChevronVisible: false,
+        ),
+        onCalendarCreated: (PageController calendarPageController) {
+          widget._calendarController = calendarPageController;
+        },
+        selectedDayPredicate: (day) {
+          return isSameDay(widget._selectedDay, day);
+        },
+        onDaySelected: (selectedDay, focusedDay) {
+          setState(() {
+            widget._selectedDay = selectedDay;
+            widget._focusedDay = focusedDay;
+          });
+        },
+        onPageChanged: (focusedDay) {
+          widget._focusedDay = focusedDay;
+        },
+        calendarStyle: const CalendarStyle(
+          isTodayHighlighted: false,
+        ),
+        calendarBuilders: CalendarBuilders(
+          defaultBuilder: (
+            BuildContext context,
+            DateTime day,
+            DateTime focusedDay,
+          ) =>
+              defaultCalendarBuilder(context, day, focusedDay),
+          outsideBuilder: (
+            BuildContext context,
+            DateTime day,
+            DateTime focusedDay,
+          ) =>
+              defaultCalendarBuilder(context, day, focusedDay),
+          selectedBuilder: (
+            BuildContext context,
+            DateTime day,
+            DateTime events,
+          ) =>
+              selectedCalendarBuilder(context, day, events),
+          headerTitleBuilder: (BuildContext context, DateTime day) =>
+              titleCalendarBuilder(
+            context,
+            day,
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -173,7 +180,7 @@ class _CalendarState extends State<Calendar> {
     return Row(
       children: [
         IconButton(
-          onPressed: () => widget.calendarController?.previousPage(
+          onPressed: () => widget._calendarController?.previousPage(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeIn,
           ),
@@ -184,7 +191,7 @@ class _CalendarState extends State<Calendar> {
           ),
         ),
         IconButton(
-          onPressed: () => widget.calendarController?.nextPage(
+          onPressed: () => widget._calendarController?.nextPage(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeIn,
           ),
@@ -195,6 +202,52 @@ class _CalendarState extends State<Calendar> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildContractsInvoiceTabs() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 32,
+        horizontal: 16.0,
+      ),
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                widget.contractsTabActive = true;
+              });
+            },
+            child: const Text("Contracts"),
+            style: ElevatedButton.styleFrom(
+              primary: widget.contractsTabActive
+                  ? MyColors.jade
+                  : MyColors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+          const SizedBox(width: 15),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                widget.contractsTabActive = false;
+              });
+            },
+            child: const Text("Invoice"),
+            style: ElevatedButton.styleFrom(
+              primary: !widget.contractsTabActive
+                  ? MyColors.jade
+                  : MyColors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
